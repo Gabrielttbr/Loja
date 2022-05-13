@@ -4,6 +4,7 @@ const bodyParser = require('body-parser')
 const corsConfig = require('./config/cors').cors
 const routerFaturamento = require('./router/faturamentoDoDia')
 const routerFiado = require('./router/fiado')
+const routerUsuario = require('./router/usuario')
 const app = express();
 
 /*==============================================================================================*/
@@ -25,6 +26,7 @@ app.use(corsConfig)
 
 app.use('/faturamento', routerFaturamento)
 app.use('/fiado', routerFiado)
+app.use('/usuario', routerUsuario )
 
 
 
