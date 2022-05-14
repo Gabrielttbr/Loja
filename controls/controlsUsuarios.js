@@ -1,5 +1,6 @@
 const bcrypt = require("bcrypt");
 const conexaobd = require("../db");
+const jwt = require('jsonwebtoken')
 
 exports.postCadsatro = async (req, res, next) => {
   bcrypt.hash(req.body.senha, 10, async (erroBcrypt, hash) => {
@@ -25,8 +26,27 @@ exports.postCadsatro = async (req, res, next) => {
     }
   });
 };
-exports.postLogin = (req, res, next) => {
-  res.status(201).send({
-    mss: "LOGIN USUARIO",
-  });
+exports.postLogin = async (req, res, next) => {
+  const result = await conexaobd.executeQuery(
+    "select * from usuario where email = ?;",
+    [req.body.email]
+  );
+  if(result.length < 1) return res.status(401).send({message: " Falha na autentificação!"})
+  // COMPARA SE A SENHA E VÁLIDA
+  bcrypt.compare(req.body.senha, result[0].senha, (erro, resultado) => {
+    if (erro) return res.status(401).send(" Falha na autentificação!");
+    if (resultado) {
+      let token = jwt.sign({
+        id_usuario: result[0].id_usuario,
+        email: result[0].email
+      }, process.env.JWT_KEY, { expiresIn: '1h'})
+      
+      return res.status(200).send({
+        message:"Autentificado com sucesso!",
+        token: token 
+      });
+
+    }
+    return res.status(401).send(" Falha na autentificação!");
+  })
 };
