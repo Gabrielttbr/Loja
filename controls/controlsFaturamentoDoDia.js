@@ -30,17 +30,29 @@ exports.postFaturamento = async (req, res, next) => {
     }
 
 }
-exports.patchFaturamento = (req, res, next) => {
-    res.status(200).send(
-        {
-            mss: "PATCH faturamento"
-        }
-    )
+exports.patchFaturamento = async (req, res, next) => {
+    try{
+        const result = await conexaobd.executeQuery('update caixa set data = curdate(), dinheiro = ?, cartao = ?, pix = ?, quemfechou = ? where id_caixa = ?;',
+        [req.body.dinheiro, req.body.cartao, req.body.pix, req.body.quemfechou, req.body.id_caixa])
+        return res.status(200).send({
+            mss: "Produto alterado com sucesso",
+            response: result,
+        })
+        
+    }catch(erro){
+        return res.status(500).send(erro)
+    }
 }
-exports.deleteFaturamento = (req, res, next) => {
-    res.status(200).send(
-        {
-            mss: "DELETE faturamneto"
-        }
-    )
+exports.deleteFaturamento = async (req, res, next) => {
+    try{
+        const result = await conexaobd.executeQuery('delete from caixa where id_caixa = ?;',
+        [req.body.id_caixa])
+        return res.status(200).send({
+            mss: "Produto deletado como sucesso",
+            response: result,
+        })
+        
+    }catch(erro){
+        return res.status(500).send(erro)
+    }
 }
