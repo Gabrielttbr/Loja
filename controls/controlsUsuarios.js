@@ -2,6 +2,7 @@ const bcrypt = require("bcrypt");
 const conexaobd = require("../db");
 const jwt = require('jsonwebtoken')
 
+// CADASTRO DE USUAŔIO
 exports.postCadsatro = async (req, res, next) => {
   bcrypt.hash(req.body.senha, 10, async (erroBcrypt, hash) => {
     if (erroBcrypt) return res.status(500).send({ erro: erroBcrypt });
@@ -26,6 +27,9 @@ exports.postCadsatro = async (req, res, next) => {
     }
   });
 };
+
+
+// SEÇÃO DE LOGAR DO USUÁRIO
 exports.postLogin = async (req, res, next) => {
   const result = await conexaobd.executeQuery(
     "select * from usuario where email = ?;",
