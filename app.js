@@ -32,17 +32,6 @@ app.use('/usuario', routerUsuario )
 
 
 
-
-
-
-
-
-
-
-
-
-
-
 /*==============================================================================================*/
 //                                                                                              //
 //                           TRATAMENTO DE ERRO, CASO NÃO ENCONTRE NENHUMA ROTA                 //
