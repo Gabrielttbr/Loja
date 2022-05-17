@@ -1,38 +1,46 @@
-exports.getFiado = (req, res, next) => {
-    res.status(200).send(
-        {
-            mss: "GET todos os fiado"
-        }
-    )
+const conexaobd = require('../db')
+
+exports.getFiado = async (req, res, next) => {
+    try {        
+        const result = await conexaobd.executeQuery('SELECT * FROM fiado')
+        return res.status(200).send(result)
+    } catch (error) {
+        return res.status(500).send({ erro: error})
+    }
 }
-exports.getFiadoEspesfico =  (req,res,next) => {
+exports.getFiadoEspesfico =  async (req,res,next) => {
     const id = req.params.id_fiado
-    res.status(200).send(
-        {
-            mss: "Get do fiado espesífico",
-            id_fiado: id
-        }
-    )
+    try {
+        const result = await conexaobd.executeQuery('SELECT * FROM fiado WHERE id_fiado = ?;', [id])
+        return res.status(200).send(result)
+    } catch (error) {
+        return res.status(500).send({ erro: error})
+    }
 }
-exports.postFiado = (req, res, next) => {
-    res.status(201).send(
-        {
-            mss: "POST fiado"
-        }
-    )
+exports.postFiado = async (req, res, next) => {
+    try {
+        const result = await conexaobd.executeQuery('insert into fiado (nome, descricao) values (?,?);', [req.body.nome, req.body.descricao])
+        return res.status(200).send({ mss: "Produto inserito com sucesso", response: result})
+    } catch (error) {
+        return res.status(500).send({ erro: error})
+    }
 }
 
-exports.patchFiado = (req, res, next) => {
-    res.status(201).send(
-        {
-            mss: "PATCH fiado"
-        }
-    )
+exports.patchFiado = async (req, res, next) => {
+    try {
+        const result = await conexaobd.executeQuery('UPDATE fiado set nome = ?, descricao = ? where id_fiado = ?;', [req.body.nome, req.body.descricao, req.body.id_fiado])
+        return res.status(200).send({ mss: "Produto atualizado com sucesso", response: result})
+    } catch (error) {
+        return res.status(500).send({ erro: error})
+    }
 }
-exports.deleteFiado = (req, res, next) => {
-    res.status(201).send(
-        {
-            mss: "DELETE fiado"
-        }
-    )
+exports.deleteFiado = async (req, res, next) => {
+    try{
+        const result = await conexaobd.executeQuery('DELETE FROM fiado where id_fiado = ?;', [req.body.id_fiado])
+        return res.status(201).send({
+            mss: "produto deletado com sucesso", response: result 
+        })
+    }catch( error){
+        return res.status(500).send({ erro: error})
+    }
 }
