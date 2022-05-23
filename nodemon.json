@@ -2,7 +2,7 @@
     "env": {
         "MYSQL_USER": "root",
         "MYSQL_DATABASE": "osmeninos",
-        "MYSQL_PASSWORD": "root",
+        "MYSQL_PASSWORD": "123456",
         "MYSQL_HOST": "localhost",
         "MYSQL_PORT": 3306,
 
