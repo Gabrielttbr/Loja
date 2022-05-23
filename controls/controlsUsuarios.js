@@ -42,10 +42,13 @@ exports.postLogin = async (req, res, next) => {
     [req.body.email]
   );
   // SE ESTIVER CADASTRADO RETORNA ERRO
-  if(result.length < 1) return res.status(401).send({message: " Falha na autentificação!"})
+  if(result.length < 1) return res.status(401).send({message: " Falha na autentificação!",   usuarioValid: false})
   // COMPARA SE A SENHA E VÁLIDA
   bcrypt.compare(req.body.senha, result[0].senha, (erro, resultado) => {
-    if (erro) return res.status(401).send(" Falha na autentificação!");
+    if (erro) return res.status(401).send({ 
+      message: "Falha na autentificação!",
+      usuarioValid: false
+    });
     if (resultado) {
       let token = jwt.sign({
         id_usuario: result[0].id_usuario,
@@ -54,7 +57,9 @@ exports.postLogin = async (req, res, next) => {
       
       return res.status(200).send({
         message:"Autentificado com sucesso!",
-        token: token 
+        token: token,
+        usuarioValid: true
+
       });
 
     }
