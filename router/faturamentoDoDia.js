@@ -3,10 +3,10 @@ const router = express.Router();
 const controlsFaturamento = require('../controls/controlsFaturamentoDoDia');
 const login = require('../middlware/login');
 
-router.get('/', login, controlsFaturamento.getFaturamentos);
+router.get('/',  controlsFaturamento.getFaturamentos);
 router.get('/:id_caixa', login, controlsFaturamento.getFaturamentoEspesificio);
-router.post('/', login, controlsFaturamento.postFaturamento);
-router.patch('/', login, controlsFaturamento.patchFaturamento);
-router.delete('/', login, controlsFaturamento.deleteFaturamento);
+router.post('/', controlsFaturamento.postFaturamento);
+router.patch('/',  controlsFaturamento.patchFaturamento);
+router.delete('/',  controlsFaturamento.deleteFaturamento);
 
 module.exports = router;

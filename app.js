@@ -1,7 +1,8 @@
 const express = require('express');
 const morgan = require('morgan')
 const bodyParser = require('body-parser')
-const corsConfig = require('./config/cors').cors
+const cors = require('cors');
+
 const routerFaturamento = require('./router/faturamentoDoDia')
 const routerFiado = require('./router/fiado')
 const routerUsuario = require('./router/usuario')
@@ -15,8 +16,14 @@ const app = express();
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extends: false}));
 app.use(bodyParser.json())
-app.use(corsConfig)
-
+app.use((req, res, next) => {
+	//Qual site tem permissão de realizar a conexão, no exemplo abaixo está o "*" indicando que qualquer site pode fazer a conexão
+    res.header("Access-Control-Allow-Origin", "*");
+	//Quais são os métodos que a conexão pode realizar na API
+    res.header("Access-Control-Allow-Methods", 'GET,PUT,POST,DELETE');
+    app.use(cors());
+    next();
+});
 /*==============================================================================================*/
 //                                                                                              //
 //                                  ROTAS                                                       //
