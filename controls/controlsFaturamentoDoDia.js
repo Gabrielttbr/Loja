@@ -19,7 +19,7 @@ exports.getFaturamentoEspesificio = async (req, res, next) => {
         return res.status(500).send(erro)
     }
 }
-
+// asd
 // CADASTRA UM FATURAMENTO
 exports.postFaturamento = async (req, res, next) => {
     try{
